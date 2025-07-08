@@ -219,6 +219,41 @@ VITE_API_BASE=https://your-backend-url.com/api
 - Error handling with toast notifications
 - Responsive design patterns
 
+## 🚀 Deployment
+
+### Frontend Deployment (GitHub Pages)
+
+The frontend is configured for easy deployment to GitHub Pages:
+
+1. **Quick Deploy**:
+   ```powershell
+   # Run the deployment script
+   .\deploy.ps1
+   ```
+
+2. **Manual Deploy**:
+   ```powershell
+   cd client
+   npm run deploy
+   ```
+
+3. **Configure for your repository**:
+   - Update `homepage` in `client/package.json`
+   - Update `base` in `client/vite.config.js`
+   - See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions
+
+### Backend Deployment
+
+The backend needs to be deployed separately to services like:
+- **Render** (Free tier available)
+- **Railway** (Free tier available) 
+- **Vercel** (Free tier available)
+- **Heroku** (Paid)
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
+
+---
+
 ## 🤝 Contributing
 
 1. Fork the repository
