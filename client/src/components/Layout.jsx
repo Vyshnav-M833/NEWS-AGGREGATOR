@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Newspaper, 
@@ -10,14 +10,20 @@ import {
   Star,
   Plus
 } from 'lucide-react';
-import { clearToken } from '../utils/auth';
+import { clearToken, getUser } from '../utils/auth';
 import Footer from './Footer';
 
 const Layout = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = getUser();
+    setUser(userData);
+  }, []);
 
   const handleLogout = () => {
     clearToken();
@@ -155,16 +161,16 @@ const Layout = ({ children }) => {
               <User className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Welcome back!</h3>
-              <p className="text-gray-600 dark:text-gray-400">NewsHub User</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {user?.username || 'User'}
+              </h3>
+              {/* <p className="text-gray-600 dark:text-gray-400">News Enthusiast</p> */}
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-              <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Quick Stats</h4>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                <p>Theme: Dark Mode</p>
                 <p>Last login: Today</p>
               </div>
             </div>

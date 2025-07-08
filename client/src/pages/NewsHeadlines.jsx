@@ -109,24 +109,6 @@ export default function NewsHeadlines() {
             </div>
           </div>
 
-          {/* Category Filter */}
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <select
-                className="pl-10 pr-8 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm appearance-none min-w-[200px]"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                {categories.map(cat => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
           {/* Category Pills */}
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (

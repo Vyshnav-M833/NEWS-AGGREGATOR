@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, Newspaper, ArrowRight, Sparkles } from 'lucide-react';
 import api from '../api';
 import { toast } from 'react-toastify';
-import { setToken } from '../utils/auth';
+import { setToken, setUser } from '../utils/auth';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -19,6 +19,9 @@ export default function Login() {
     try {
       const { data } = await api.post('/login', form);
       setToken(data.token);
+      if (data.user) {
+        setUser(data.user);
+      }
       toast.success('Welcome back! 🎉');
       navigate('/');
     } catch (err) {
