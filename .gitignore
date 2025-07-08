@@ -1,0 +1,110 @@
+# === CLIENT FOLDER ===
+
+# Dependencies
+client/node_modules/
+client/.pnp
+client/.pnp.js
+
+# Testing
+client/coverage/
+
+# Production builds
+client/build/
+client/dist/
+
+# Environment variables
+client/.env
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+
+# Logs
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/lerna-debug.log*
+
+# Runtime data
+client/pids
+client/*.pid
+client/*.seed
+client/*.pid.lock
+
+# OS files
+client/.DS_Store
+client/.DS_Store?
+client/._*
+client/.Spotlight-V100
+client/.Trashes
+client/ehthumbs.db
+client/Thumbs.db
+
+# IDEs
+client/.vscode/
+client/.idea/
+client/*.swp
+client/*.swo
+
+# Temp
+client/tmp/
+client/temp/
+
+# MongoDB data
+client/data/
+
+
+# === SERVER FOLDER ===
+
+# Dependencies
+server/node_modules/
+server/.pnp
+server/.pnp.js
+
+# Testing
+server/coverage/
+
+# Production builds
+server/build/
+server/dist/
+
+# Environment variables
+server/.env
+server/.env.local
+server/.env.development.local
+server/.env.test.local
+server/.env.production.local
+
+# Logs
+server/npm-debug.log*
+server/yarn-debug.log*
+server/yarn-error.log*
+server/lerna-debug.log*
+
+# Runtime data
+server/pids
+server/*.pid
+server/*.seed
+server/*.pid.lock
+
+# OS files
+server/.DS_Store
+server/.DS_Store?
+server/._*
+server/.Spotlight-V100
+server/.Trashes
+server/ehthumbs.db
+server/Thumbs.db
+
+# IDEs
+server/.vscode/
+server/.idea/
+server/*.swp
+server/*.swo
+
+# Temp
+server/tmp/
+server/temp/
+
+# MongoDB data
+server/data/
