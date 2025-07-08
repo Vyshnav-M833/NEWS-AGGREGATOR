@@ -1,16 +1,48 @@
 // import React, { useState } from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
-// import { Eye, EyeOff, Mail, Lock, User, Newspaper, ArrowRight, Sparkles, CheckCircle } from 'lucide-react';
+// import { Eye, EyeOff, Mail, Lock, User, Newspaper, ArrowRight, Sparkles, CheckCircle, Sun, Moon, Bell, BellOff } from 'lucide-react';
 // import api from '../api';
 // import { toast } from 'react-toastify';
+// import { useTheme } from '../contexts/ThemeContext';
 
 // export default function Register() {
 //   const [form, setForm] = useState({ username: '', email: '', password: '' });
 //   const [showPassword, setShowPassword] = useState(false);
 //   const [loading, setLoading] = useState(false);
+//   const [notificationsEnabled, setNotificationsEnabled] = useState(
+//     localStorage.getItem('notificationsEnabled') === 'true'
+//   );
 //   const navigate = useNavigate();
+//   const { isDarkMode, toggleDarkMode } = useTheme();
 
 //   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+
+//   const toggleNotifications = () => {
+//     const newState = !notificationsEnabled;
+//     setNotificationsEnabled(newState);
+//     localStorage.setItem('notificationsEnabled', newState.toString());
+    
+//     if (newState) {
+//       // Request notification permission if enabling
+//       if ('Notification' in window && Notification.permission === 'default') {
+//         Notification.requestPermission().then(permission => {
+//           if (permission === 'granted') {
+//             toast.success('Notifications enabled! 🔔');
+//           } else {
+//             toast.info('Notifications blocked by browser settings');
+//             setNotificationsEnabled(false);
+//             localStorage.setItem('notificationsEnabled', 'false');
+//           }
+//         });
+//       } else if (Notification.permission === 'granted') {
+//         toast.success('Notifications enabled! 🔔');
+//       } else {
+//         toast.info('Please enable notifications in your browser settings');
+//       }
+//     } else {
+//       toast.info('Notifications disabled 🔕');
+//     }
+//   };
 
 //   const handleSubmit = async e => {
 //     e.preventDefault();
@@ -28,12 +60,36 @@
 //   };
 
 //   return (
-//     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
+//     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 flex items-center justify-center p-4">
+//       {/* Settings Bar */}
+//       <div className="fixed top-4 right-4 flex items-center gap-2 z-20">
+//         {/* Notifications Toggle */}
+//         <button
+//           onClick={toggleNotifications}
+//           className="p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110"
+//           title={notificationsEnabled ? 'Disable notifications' : 'Enable notifications'}
+//         >
+//           {notificationsEnabled ? 
+//             <Bell className="w-5 h-5 text-blue-600" /> : 
+//             <BellOff className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+//           }
+//         </button>
+        
+//         {/* Theme Toggle */}
+//         <button
+//           onClick={toggleDarkMode}
+//           className="p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110"
+//           title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+//         >
+//           {isDarkMode ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5 text-gray-600" />}
+//         </button>
+//       </div>
+
 //       {/* Background decoration */}
 //       <div className="absolute inset-0 overflow-hidden">
-//         <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-//         <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-1000"></div>
-//         <div className="absolute top-3/4 right-1/3 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-500"></div>
+//         <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-purple-200 dark:bg-purple-900/30 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+//         <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-blue-200 dark:bg-blue-900/30 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-1000"></div>
+//         <div className="absolute top-3/4 right-1/3 w-72 h-72 bg-pink-200 dark:bg-pink-900/30 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-500"></div>
 //       </div>
 
 //       <div className="relative z-10 w-full max-w-md">
@@ -45,17 +101,17 @@
 //           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
 //             Join NewsHub
 //           </h1>
-//           <p className="text-gray-600 flex items-center justify-center gap-1">
+//           <p className="text-gray-600 dark:text-gray-300 flex items-center justify-center gap-1">
 //             <Sparkles className="w-4 h-4" />
 //             Create your account and start exploring
 //           </p>
 //         </div>
 
 //         {/* Register form */}
-//         <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-white/20 animate-slide-up">
+//         <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-white/20 dark:border-gray-700/20 animate-slide-up">
 //           <div className="text-center mb-6">
-//             <h2 className="text-2xl font-bold text-gray-900 mb-2">Create Account</h2>
-//             <p className="text-gray-600">Fill in your details to get started</p>
+//             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Create Account</h2>
+//             <p className="text-gray-600 dark:text-gray-300">Fill in your details to get started</p>
 //           </div>
 
 //           <form onSubmit={handleSubmit} className="space-y-6">

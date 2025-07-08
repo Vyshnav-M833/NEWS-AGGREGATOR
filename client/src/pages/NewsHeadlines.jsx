@@ -18,7 +18,6 @@ import api from '../api.js';
 import { useSavedArticles } from '../contexts/SavedArticlesContext';
 
 export default function NewsHeadlines() {
-  const [query, setQuery] = useState('');
   const [category, setCategory] = useState('general');
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -38,10 +37,9 @@ export default function NewsHeadlines() {
   const fetchHeadlines = useCallback(async () => {
     setLoading(true);
     try {
-      console.log('Fetching news with params:', { q: query || undefined, category });
+      console.log('Fetching news with params:', { category });
       const { data } = await api.get('/news', {
         params: {
-          q: query || undefined,
           category,
           max: 20,
         },
@@ -54,7 +52,7 @@ export default function NewsHeadlines() {
       setArticles([]);
     }
     setLoading(false);
-  }, [query, category]);
+  }, [category]);
 
   useEffect(() => {
     fetchHeadlines();
@@ -111,40 +109,21 @@ export default function NewsHeadlines() {
             </div>
           </div>
 
-          {/* Search and Filters */}
-          <div className="flex flex-col lg:flex-row gap-4 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                placeholder="Search for news, topics, or keywords..."
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-            
-            <div className="flex gap-3">
-              <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <select
-                  className="pl-10 pr-8 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm appearance-none min-w-[150px]"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  {categories.map(cat => (
-                    <option key={cat.value} value={cat.value}>
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <button
-                onClick={fetchHeadlines}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-lg"
+          {/* Category Filter */}
+          <div className="flex justify-center mb-6">
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <select
+                className="pl-10 pr-8 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm appearance-none min-w-[200px]"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
               >
-                Search
-              </button>
+                {categories.map(cat => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

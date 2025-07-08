@@ -14,7 +14,8 @@ import {
   BarChart3,
   Activity,
   Newspaper,
-  Plus
+  Plus,
+  Search
 } from 'lucide-react';
 import api from '../api';
 import { toast } from 'react-toastify';
@@ -24,6 +25,9 @@ import { useSavedArticles } from '../contexts/SavedArticlesContext';
 export default function Dashboard() {
   const navigate = useNavigate();
   const { savedArticles } = useSavedArticles();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
   
   // Helper function to get this week's dates
   const getThisWeekDates = () => {
@@ -125,18 +129,59 @@ export default function Dashboard() {
     fetchDashboardData();
   }, [navigate, savedArticles]);
 
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      setSearchResults(null);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      // Search API news
+      const { data: apiNews } = await api.get('/news', {
+        params: {
+          q: searchQuery,
+          max: 10
+        }
+      });
+
+      // Search user-created articles (from localStorage or API)
+      const userArticles = JSON.parse(localStorage.getItem('userArticles') || '[]');
+      const filteredUserArticles = userArticles.filter(article =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        article.content.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      // Search saved articles
+      const filteredSavedArticles = savedArticles.filter(article =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (article.description && article.description.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+
+      setSearchResults({
+        apiNews: apiNews.articles || [],
+        userArticles: filteredUserArticles,
+        savedArticles: filteredSavedArticles
+      });
+    } catch (error) {
+      console.error('Search error:', error);
+      toast.error('Search failed. Please try again.');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setSearchResults(null);
+  };
+
   const StatCard = ({ icon: Icon, title, value, change, color, bgColor }) => (
     <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">{title}</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">{value}</p>
-          {change && (
-            <p className={`text-sm mt-2 flex items-center ${change > 0 ? 'text-green-600' : 'text-red-600'}`}>
-              <TrendingUp className="w-4 h-4 mr-1" />
-              {change > 0 ? '+' : ''}{change}% from yesterday
-            </p>
-          )}
         </div>
         <div className={`p-4 rounded-xl ${bgColor}`}>
           <Icon className={`w-8 h-8 ${color}`} />
@@ -229,6 +274,147 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Search Section */}
+      <div className="mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Search Articles</h2>
+          <div className="flex gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search news articles, saved articles, and your content..."
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              />
+            </div>
+            <button
+              onClick={handleSearch}
+              disabled={isSearching || !searchQuery.trim()}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 shadow-lg"
+            >
+              {isSearching ? 'Searching...' : 'Search'}
+            </button>
+            {searchResults && (
+              <button
+                onClick={clearSearch}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Search Results */}
+      {searchResults && (
+        <div className="mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              Search Results for "{searchQuery}"
+            </h3>
+            
+            {/* API News Results */}
+            {searchResults.apiNews.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+                  <Globe className="w-4 h-4 mr-2" />
+                  Latest News ({searchResults.apiNews.length})
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {searchResults.apiNews.slice(0, 4).map((article, idx) => (
+                    <div key={idx} className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <h5 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2 mb-2">
+                        {article.title}
+                      </h5>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                        {article.source?.name} • {new Date(article.publishedAt).toLocaleDateString()}
+                      </p>
+                      <a
+                        href={article.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 dark:text-blue-400 text-xs hover:underline"
+                      >
+                        Read article
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Saved Articles Results */}
+            {searchResults.savedArticles.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+                  <Star className="w-4 h-4 mr-2" />
+                  Saved Articles ({searchResults.savedArticles.length})
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {searchResults.savedArticles.slice(0, 4).map((article, idx) => (
+                    <div key={idx} className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <h5 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2 mb-2">
+                        {article.title}
+                      </h5>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                        {article.source?.name} • Saved article
+                      </p>
+                      <a
+                        href={article.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 dark:text-blue-400 text-xs hover:underline"
+                      >
+                        Read article
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* User Articles Results */}
+            {searchResults.userArticles.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Your Articles ({searchResults.userArticles.length})
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {searchResults.userArticles.slice(0, 4).map((article, idx) => (
+                    <div key={idx} className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <h5 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2 mb-2">
+                        {article.title}
+                      </h5>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                        Created by you • {new Date(article.createdAt).toLocaleDateString()}
+                      </p>
+                      <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">
+                        {article.content.substring(0, 100)}...
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* No Results */}
+            {searchResults.apiNews.length === 0 && 
+             searchResults.savedArticles.length === 0 && 
+             searchResults.userArticles.length === 0 && (
+              <div className="text-center py-8">
+                <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-gray-400">No articles found matching your search.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
@@ -294,7 +480,7 @@ export default function Dashboard() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Quick Actions */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+          {/* <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
               <Activity className="w-5 h-5 text-green-500" />
               Quick Actions
@@ -327,8 +513,22 @@ export default function Dashboard() {
                 <ArrowRight className="w-4 h-4 ml-auto transform group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             </div>
+          </div> */}
+{/* Today's Date */}
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 text-white">
+            <div className="flex items-center gap-3">
+              <Calendar className="w-8 h-8" />
+              <div>
+                <h3 className="text-xl font-bold">Today</h3>
+                <p className="text-blue-100">{new Date().toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</p>
+              </div>
+            </div>
           </div>
-
           {/* Reading Activity */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
@@ -388,21 +588,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Today's Date */}
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 text-white">
-            <div className="flex items-center gap-3">
-              <Calendar className="w-8 h-8" />
-              <div>
-                <h3 className="text-xl font-bold">Today</h3>
-                <p className="text-blue-100">{new Date().toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}</p>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>
