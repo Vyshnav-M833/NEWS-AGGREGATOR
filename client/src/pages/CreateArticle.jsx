@@ -84,22 +84,22 @@ export default function CreateArticle() {
 
   if (preview) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
+      <div className="min-h-screen bg-gray-900 p-6">
         <div className="max-w-4xl mx-auto">
           {/* Preview Header */}
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Article Preview</h1>
+            <h1 className="text-3xl font-bold text-white">Article Preview</h1>
             <div className="flex gap-3">
               <button
                 onClick={() => setPreview(false)}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200"
+                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
               >
                 Edit
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={saving}
-                className="bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:from-green-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 flex items-center gap-2"
+                className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 flex items-center gap-2"
               >
                 {saving ? (
                   <>
@@ -117,7 +117,7 @@ export default function CreateArticle() {
           </div>
 
           {/* Preview Content */}
-          <article className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <article className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
             {article.imageUrl && (
               <div className="h-64 overflow-hidden">
                 <img
@@ -131,38 +131,38 @@ export default function CreateArticle() {
             <div className="p-8">
               {/* Category and Date */}
               <div className="flex items-center gap-4 mb-4">
-                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium capitalize">
+                <span className="bg-blue-900/30 text-blue-400 px-3 py-1 rounded-lg text-sm font-medium capitalize">
                   {article.category}
                 </span>
-                <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
+                <div className="flex items-center text-gray-400 text-sm">
                   <Calendar className="w-4 h-4 mr-1" />
                   {new Date().toLocaleDateString()}
                 </div>
               </div>
 
               {/* Title */}
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              <h1 className="text-3xl font-bold text-white mb-4">
                 {article.title}
               </h1>
 
               {/* Author */}
               {article.author && (
-                <div className="flex items-center text-gray-600 dark:text-gray-400 mb-6">
+                <div className="flex items-center text-gray-400 mb-6">
                   <User className="w-4 h-4 mr-2" />
                   By {article.author}
                 </div>
               )}
 
               {/* Description */}
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+              <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                 {article.description}
               </p>
 
               {/* Content */}
-              <div className="prose dark:prose-invert max-w-none">
+              <div className="prose prose-invert max-w-none">
                 {article.content.split('\n').map((paragraph, idx) => (
                   paragraph.trim() && (
-                    <p key={idx} className="mb-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p key={idx} className="mb-4 text-gray-300 leading-relaxed">
                       {paragraph}
                     </p>
                   )
@@ -171,11 +171,11 @@ export default function CreateArticle() {
 
               {/* Tags */}
               {article.tags && (
-                <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="mt-8 pt-6 border-t border-gray-700">
                   <div className="flex items-center gap-2 flex-wrap">
                     <Tag className="w-4 h-4 text-gray-400" />
                     {article.tags.split(',').map((tag, idx) => (
-                      <span key={idx} className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded-lg text-sm">
+                      <span key={idx} className="bg-gray-700 text-gray-300 px-2 py-1 rounded-lg text-sm">
                         #{tag.trim()}
                       </span>
                     ))}
@@ -190,25 +190,25 @@ export default function CreateArticle() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
+    <div className="min-h-screen bg-gray-900 p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-3">
-            <PlusCircle className="w-10 h-10 text-green-500" />
+          <h1 className="text-4xl font-bold text-white flex items-center gap-3">
+            <PlusCircle className="w-10 h-10 text-green-400" />
             Create New Article
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <p className="text-gray-400 mt-2">
             Share your thoughts and stories with the world
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+        <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg border border-gray-700 p-8">
           <div className="space-y-6">
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Article Title *
               </label>
               <input
@@ -217,14 +217,14 @@ export default function CreateArticle() {
                 value={article.title}
                 onChange={handleInputChange}
                 placeholder="Enter a compelling title for your article"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
                 required
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Description *
               </label>
               <textarea
@@ -233,14 +233,14 @@ export default function CreateArticle() {
                 onChange={handleInputChange}
                 placeholder="Write a brief description or summary of your article"
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none"
                 required
               />
             </div>
 
             {/* Content */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Article Content *
               </label>
               <textarea
@@ -249,7 +249,7 @@ export default function CreateArticle() {
                 onChange={handleInputChange}
                 placeholder="Write your full article content here..."
                 rows={12}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none"
                 required
               />
             </div>
@@ -257,7 +257,7 @@ export default function CreateArticle() {
             {/* Row for Author and Category */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Author
                 </label>
                 <input
@@ -266,22 +266,22 @@ export default function CreateArticle() {
                   value={article.author}
                   onChange={handleInputChange}
                   placeholder="Your name"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Category
                 </label>
                 <select
                   name="category"
                   value={article.category}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
                 >
                   {categories.map(cat => (
-                    <option key={cat} value={cat} className="capitalize">
+                    <option key={cat} value={cat} className="capitalize bg-gray-700">
                       {cat}
                     </option>
                   ))}
@@ -291,7 +291,7 @@ export default function CreateArticle() {
 
             {/* Image URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Image URL
               </label>
               <input
@@ -300,13 +300,13 @@ export default function CreateArticle() {
                 value={article.imageUrl}
                 onChange={handleInputChange}
                 placeholder="https://example.com/image.jpg"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
               />
             </div>
 
             {/* Tags */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Tags
               </label>
               <input
@@ -315,18 +315,18 @@ export default function CreateArticle() {
                 value={article.tags}
                 onChange={handleInputChange}
                 placeholder="technology, innovation, future (comma separated)"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
               />
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex gap-4 mt-8 pt-6 border-t border-gray-700">
             <button
               type="button"
               onClick={() => setPreview(true)}
               disabled={!article.title || !article.description || !article.content}
-              className="flex-1 bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 py-3 rounded-xl font-medium hover:from-purple-600 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Eye className="w-5 h-5" />
               Preview Article
@@ -335,7 +335,7 @@ export default function CreateArticle() {
             <button
               type="submit"
               disabled={!article.title || !article.description || !article.content || saving}
-              className="flex-1 bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:from-green-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {saving ? (
                 <>
