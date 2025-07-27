@@ -275,6 +275,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ using the MERN Stack**
-
-*NewsHub - Your Ultimate News Experience* 🚀
+## My Team:
+- Vyshnav M
+- Harishankar R
+- Hema P
+- Krithika V
